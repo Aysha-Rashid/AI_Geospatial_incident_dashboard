@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgres_db:
+    image: postgis/postgis:16-3.4
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - database
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    ports: 
+      - 8080:80
+    env_file:
+      - .env
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres_db
+    restart: always
+    networks:
+      - database
+
+volumes:
+  postgres_data: 
+  pgadmin_data:
+networks:
+  database:
+    driver: bridge

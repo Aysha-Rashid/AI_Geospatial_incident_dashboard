@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function IncidentForm({ onIncidentCreated }) {
+export default function IncidentForm({ onIncidentCreated, selectedLocation }) {
   const [formData, setFormData] = useState({
     incident_type: "",
     description: "",
-    category: "",
+    category: "Infrastructure",
     severity: "Medium",
-    status: "Open",
     latitude: "",
     longitude: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (selectedLocation) {
+      setFormData((prev) => ({
+        ...prev,
+        latitude: String(selectedLocation.latitude),
+        longitude: String(selectedLocation.longitude),
+      }));
+    }
+  }, [selectedLocation]);
 
   function handleChange(e) {
     setFormData({
@@ -31,7 +40,7 @@ export default function IncidentForm({ onIncidentCreated }) {
       description: formData.description,
       category: formData.category,
       severity: formData.severity,
-      status: formData.status,
+      status: "Open",
       latitude: Number(formData.latitude),
       longitude: Number(formData.longitude),
     };
@@ -54,9 +63,8 @@ export default function IncidentForm({ onIncidentCreated }) {
       setFormData({
         incident_type: "",
         description: "",
-        category: "",
+        category: "Infrastructure",
         severity: "Medium",
-        status: "Open",
         latitude: "",
         longitude: "",
       });
@@ -91,24 +99,20 @@ export default function IncidentForm({ onIncidentCreated }) {
         onChange={handleChange}
       />
 
-      <input
-        name="category"
-        placeholder="Category"
-        value={formData.category}
-        onChange={handleChange}
-      />
+      <select name="category" value={formData.category} onChange={handleChange}>
+        <option value="Infrastructure">Infrastructure</option>
+        <option value="Flood">Flood</option>
+        <option value="Fire">Fire</option>
+        <option value="Traffic">Traffic</option>
+        <option value="Security">Security</option>
+        <option value="Environmental">Environmental</option>
+      </select>
 
       <select name="severity" value={formData.severity} onChange={handleChange}>
         <option value="Low">Low</option>
         <option value="Medium">Medium</option>
         <option value="High">High</option>
         <option value="Critical">Critical</option>
-      </select>
-
-      <select name="status" value={formData.status} onChange={handleChange}>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Resolved">Resolved</option>
       </select>
 
       <input

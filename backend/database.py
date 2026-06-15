@@ -41,7 +41,13 @@ CREATE INDEX IF NOT EXISTS idx_location
 ON incidents 
 USING GIST (location);
 """
+# alter_table_query = """
+# ALTER TABLE incidents
+# ADD COLUMN IF NOT EXISTS ai_summary TEXT,
+# ADD COLUMN IF NOT EXISTS escalation_risk VARCHAR(50),
+# ADD COLUMN IF NOT EXISTS suggested_action TEXT;"""
 
+# cur.execute(alter_table_query)
 cur.execute(create_extension_query)
 cur.execute(create_table_query)
 cur.execute(create_index_query)
@@ -73,20 +79,20 @@ incident = {
     "longitude": 54.8773,
 }
 
-cur.execute(
-    insert_query,
-    (
-        incident["incident_type"],
-        incident["description"],
-        incident["category"],
-        incident["severity"],
-        incident["status"],
-        incident["latitude"],
-        incident["longitude"],
-        incident["longitude"],  # X = longitude
-        incident["latitude"],   # Y = latitude
-    )
-)
+# cur.execute(
+#     insert_query,
+#     (
+#         incident["incident_type"],
+#         incident["description"],
+#         incident["category"],
+#         incident["severity"],
+#         incident["status"],
+#         incident["latitude"],
+#         incident["longitude"],
+#         incident["longitude"],  # X = longitude
+#         incident["latitude"],   # Y = latitude
+#     )
+# )
 # check="""
 # SELECT
 #     id,
