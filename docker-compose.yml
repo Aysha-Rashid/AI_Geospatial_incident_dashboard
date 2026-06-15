@@ -27,7 +27,39 @@ services:
     restart: always
     networks:
       - database
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - 5173:5173
+    restart: always
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - database
 
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    depends_on:
+      - postgres_db
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    volumes:
+      - ./backend:/app
+
+    restart: always
+    networks:
+      - database
 volumes:
   postgres_data: 
   pgadmin_data:
