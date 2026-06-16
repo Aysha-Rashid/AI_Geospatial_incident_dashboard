@@ -36,11 +36,11 @@ class IncidentStatusUpdate(BaseModel):
     status: str
 
 @app.get("/incidents/nearby")
-def get_nearby_incidents(
-    lat: float = Query(..., ge=-90, le=90),
+def get_nearby_incidents( lat: float = Query(..., ge=-90, le=90),
     lng: float = Query(..., ge=-180, le=180),
     radius_km: float = Query(5, gt=0),
-):
+): # parameters 
+    
     conn, cur = get_connection()
     # cur = conn.cursor()
 
@@ -108,7 +108,10 @@ def get_nearby_incidents(
                     "updated_at": row["updated_at"].isoformat() if row["updated_at"] else None,
                 },
             })
-
+        
+        conn.commit()
+        cur.close()
+        conn.close()
         return {
             "type": "FeatureCollection",
             "features": features,
@@ -118,9 +121,6 @@ def get_nearby_incidents(
         print("NEARBY SEARCH ERROR:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
-    # finally:
-    #     cur.close()
-    #     conn.close()
 
 @app.patch("/incidents/{incident_id}/status")
 def update_incident_status(incident_id: int, status_update: IncidentStatusUpdate):
@@ -162,7 +162,8 @@ def update_incident_status(incident_id: int, status_update: IncidentStatusUpdate
             raise HTTPException(status_code=404, detail="Incident not found")
 
         conn.commit()
-
+        cur.close()
+        conn.close()
         return {
             "type": "Feature",
             "geometry": json.loads(row["geojson"]),
@@ -216,10 +217,6 @@ def get_incidents():
 
     cur.execute(query)
     rows = cur.fetchall()
-# )
-#     conn.close()
-    # cur.close(
-
     features = []
 
     for row in rows:
@@ -242,7 +239,9 @@ def get_incidents():
                 "suggested_action": row["suggested_action"],
             },
         })
-
+    conn.commit()
+    cur.close()
+    conn.close()
     return {
         "type": "FeatureCollection",
         "features": features,
@@ -335,16 +334,14 @@ def create_incident(incident: IncidentCreate):
         }
 
         conn.commit()
+        cur.close()
+        conn.close()
         return response_data
 
     except Exception as e:
         conn.rollback()
         print("CREATE INCIDENT ERROR:", e)
         raise HTTPException(status_code=500, detail=str(e))
-
-    # finally:
-    #     cur.close()
-    #     conn.close()
 
 def analyze_incident(description: str, severity: str, category: str):
     description_lower = (description or "").lower()

@@ -51,7 +51,7 @@ export default function MapView({ geoData, selectedLocation, onMapClick }) {
   return (
     <MapContainer
       center={[24.4539, 54.3773]}
-      zoom={11}
+      zoom={13}
       style={{ height: "600px", width: "100%" }}
     >
       <TileLayer

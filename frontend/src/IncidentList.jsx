@@ -75,9 +75,9 @@ export default function IncidentList({ geoData, onStatusUpdated }) {
             <strong>AI Summary:</strong> {props.ai_summary || "N/A"}
             </p>
 
-            <p>
-            <strong>Escalation Risk:</strong> {props.escalation_risk || "N/A"}
-            </p>
+            <span className={`risk-${props.escalation_risk?.toLowerCase()}`}>
+              {props.escalation_risk}
+            </span>
 
             <p>
             <strong>Suggested Action:</strong> {props.suggested_action || "N/A"}
