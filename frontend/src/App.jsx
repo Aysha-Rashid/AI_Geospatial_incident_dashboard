@@ -5,6 +5,7 @@ import FilterPanel from "./FilterPanel";
 import "leaflet/dist/leaflet.css";
 import IncidentList from "./IncidentList";
 import NearbySearch from "./NearbySearch";
+import "./App.css";
 
 function App() {
   const [geoData, setGeoData] = useState(null);
@@ -76,48 +77,61 @@ function App() {
     : null;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Geospatial Incident Alert Dashboard</h1>
-
-      <p>Click anywhere on the map to auto-fill latitude and longitude.</p>
-
-      <IncidentForm
-        onIncidentCreated={() => fetchIncidents(filters)}
-        selectedLocation={selectedLocation}
-      />
-
-      {loading && <p>Loading incidents...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {geoData && (
-        <FilterPanel
-          filters={filters}
-          setFilters={setFilters}
-          categories={categories}
-          total={features.length}
-          visible={filteredFeatures.length}
-        />
-      )}
-      
-        <NearbySearch
-          selectedLocation={selectedLocation}
-          onNearbyResult={setGeoData}
-          onReset={() => fetchIncidents(filters)}
-        />
-
-      {filteredGeoData && (
-        <MapView
-          geoData={filteredGeoData}
-          selectedLocation={selectedLocation}
-          onMapClick={setSelectedLocation}
-        />
-      )}
-      {geoData && (
-        <IncidentList
-          geoData={geoData}
-          onStatusUpdated={() => fetchIncidents(filters)}
-        />
-      )}
+    <div className="app-shell">
+      <header className="topbar">
+        <div>
+          <h1>Geospatial Incident Alert Dashboard</h1>
+          <p>AI-assisted geospatial incident monitoring and risk analysis</p>
+        </div>
+        <span className="live-badge">Live System</span>
+      </header>
+      <main className="dashboard-grid">
+        <aside className="sidebar">
+          <div className="card">
+            <IncidentForm
+              onIncidentCreated={() => fetchIncidents(filters)}
+              selectedLocation={selectedLocation}
+            />
+            {loading && <p>Loading incidents...</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </div>
+          <div className="card">
+            {geoData && (
+              <FilterPanel
+                filters={filters}
+                setFilters={setFilters}
+                categories={categories}
+                total={features.length}
+                visible={filteredFeatures.length}
+              />
+            )}
+          </div>
+          <div className="card">
+            <NearbySearch
+              selectedLocation={selectedLocation}
+              onNearbyResult={setGeoData}
+              onReset={() => fetchIncidents(filters)}
+            />
+          </div>
+        </aside>
+        <section className="map-panel">
+          {filteredGeoData && (
+            <MapView
+              geoData={filteredGeoData}
+              selectedLocation={selectedLocation}
+              onMapClick={setSelectedLocation}
+            />
+          )}
+        </section>
+      </main>
+      <section className="card incident-section">
+        {geoData && (
+          <IncidentList
+            geoData={geoData}
+            onStatusUpdated={() => fetchIncidents(filters)}
+          />
+        )}
+      </section>
     </div>
   );
 }

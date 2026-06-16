@@ -7,7 +7,7 @@ from psycopg2.extras import RealDictCursor
 load_dotenv()
 
 conn = psycopg2.connect(
-    host=os.getenv("host"),
+    host="postgres",
     database=os.getenv("POSTGRES_DB"),
     user=os.getenv("POSTGRES_USER"),
     password=os.getenv("POSTGRES_PASSWORD"),
@@ -32,7 +32,10 @@ CREATE TABLE IF NOT EXISTS incidents (
     longitude DOUBLE PRECISION NOT NULL,
     location GEOGRAPHY(POINT, 4326) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ai_summary TEXT,
+    escalation_risk VARCHAR(50),
+    suggested_action TEXT
 );
 """
 

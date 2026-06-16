@@ -56,7 +56,6 @@ services:
       - ./.env
     volumes:
       - ./backend:/app
-
     restart: always
     networks:
       - database
