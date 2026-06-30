@@ -71,17 +71,17 @@ export default function IncidentList({ geoData, onStatusUpdated }) {
                 <option value="Resolved">Resolved</option>
               </select>
             </label>
-          <p>
-            <strong>AI Summary:</strong> {props.ai_summary || "N/A"}
-            </p>
+          {/* <p> */}
+            {/* <strong>AI Summary:</strong> {props.ai_summary || "N/A"} */}
+            {/* </p> */}
 
             <span className={`risk-${props.escalation_risk?.toLowerCase()}`}>
               {props.escalation_risk}
             </span>
 
-            <p>
+            {/* <p>
             <strong>Suggested Action:</strong> {props.suggested_action || "N/A"}
-            </p>
+            </p> */}
           </div> 
         );
       })}

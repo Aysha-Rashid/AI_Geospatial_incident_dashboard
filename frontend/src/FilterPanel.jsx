@@ -7,7 +7,7 @@ export default function FilterPanel({ filters, setFilters, categories, total, vi
   }
 
   return (
-    <div style={{ marginBottom: "20px", display: "flex", gap: "10px", alignItems: "center" }}>
+    <div className="card">
       <select name="severity" value={filters.severity} onChange={handleChange}>
         <option value="All">All Severities</option>
         <option value="Low">Low</option>
@@ -31,23 +31,25 @@ export default function FilterPanel({ filters, setFilters, categories, total, vi
           </option>
         ))}
       </select>
-
-      <button
-        type="button"
-        onClick={() =>
-          setFilters({
-            severity: "All",
-            status: "All",
-            category: "All",
-          })
-        }
-      >
-        Reset
-      </button>
-
-      <span>
-        Showing {visible} of {total} incidents
-      </span>
+      <div>
+        <button
+          type="button"
+          onClick={() =>
+            setFilters({
+              severity: "All",
+              status: "All",
+              category: "All",
+            })
+          }
+        >
+          Reset
+        </button>
+      </div>
+      <div>
+        <span>
+          Showing {visible} of {total} incidents
+        </span>
+      </div>
     </div>
   );
 }

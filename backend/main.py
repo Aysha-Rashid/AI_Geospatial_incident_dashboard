@@ -110,8 +110,8 @@ def get_nearby_incidents( lat: float = Query(..., ge=-90, le=90),
             })
         
         conn.commit()
-        cur.close()
-        conn.close()
+        # cur.close()
+        # conn.close()
         return {
             "type": "FeatureCollection",
             "features": features,
@@ -162,8 +162,8 @@ def update_incident_status(incident_id: int, status_update: IncidentStatusUpdate
             raise HTTPException(status_code=404, detail="Incident not found")
 
         conn.commit()
-        cur.close()
-        conn.close()
+        # cur.close()
+        # conn.close()
         return {
             "type": "Feature",
             "geometry": json.loads(row["geojson"]),
@@ -240,8 +240,8 @@ def get_incidents():
             },
         })
     conn.commit()
-    cur.close()
-    conn.close()
+    # cur.close()
+    # conn.close()
     return {
         "type": "FeatureCollection",
         "features": features,
@@ -334,8 +334,8 @@ def create_incident(incident: IncidentCreate):
         }
 
         conn.commit()
-        cur.close()
-        conn.close()
+        # cur.close()
+        # conn.close()
         return response_data
 
     except Exception as e:
